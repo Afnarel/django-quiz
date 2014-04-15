@@ -1,0 +1,6 @@
+django-quiz was originally created by Tom Walker <tomwalker0472@gmail.com>
+at https://github.com/tomwalker/django_quiz
+
+Contributors include:
+    Nitesh Rijal <nitesh@nepzilla.com>
+    François Chapuis <afnarel@gmail.com>
