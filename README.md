@@ -1,14 +1,11 @@
 Django quiz app
 ===============
 
-This is a configurable quiz app for Django.
+This is a configurable quiz app for Django, developed by
+Tom Walker ([tomwalker](https://github.com/tomwalker)).
 
-I use it to run a few medical revision websites. Here is an [example website](http://www.revisemrcp.com/)
-
-My websites have used twitter bootstrap for the front end and I have tried to strip out anything from 
-the template files that are dependant on bootstrap.
-
-This is a major work in progress.
+Here is an [example website](http://www.revisemrcp.com/) that he developed
+using it.
 
 Current features
 ----------------
@@ -23,8 +20,3 @@ Multiple choice questions
 * Questions can be given a category
 * Success rate for each category can be monitored on a progress page
 * Explanation for each question result can be given
-
-
-It was developed using Django 1.4.1. 
-
-This is my first open source project so please forgive any problems and/or dreadful code!
