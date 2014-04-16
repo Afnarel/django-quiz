@@ -10,8 +10,7 @@ from django.template import RequestContext
 from django.shortcuts import render, get_object_or_404
 
 
-from quiz.models import Quiz, Category, Progress, Sitting
-from multichoice.models import Question, Answer
+from quiz.models import Quiz, Category, Progress, Sitting, Question, Answer
 
 
 """
