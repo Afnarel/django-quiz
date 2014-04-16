@@ -40,14 +40,14 @@ To do:
 """
 
 def index(request):
-  return render(request, 'quiz_index.html', {
+  return render(request, 'quiz/quiz_index.html', {
                 'categories': Category.objects.all(),
     })
 
 def view_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
     quizzes = Quiz.objects.filter(category=category)
-    return render(request, 'view_quiz_category.html', {
+    return render(request, 'quiz/view_quiz_category.html', {
                 'category': category,
                 'quizzes': quizzes
         })
@@ -184,7 +184,7 @@ def load_anon_next_question(request, quiz):
     next_question_id = question_list[0]
     question = Question.objects.get(id=next_question_id)
     
-    return render_to_response('question.html', 
+    return render_to_response('quiz/question.html', 
                               {'quiz': quiz, 
                                'question': question, 
                                'previous': previous, 
@@ -229,7 +229,7 @@ def user_load_next_question(request, sitting, quiz):
 
     next_question = Question.objects.get(id=question_ID)
 
-    return render_to_response('question.html', 
+    return render_to_response('quiz/question.html', 
                               {'quiz': quiz,
                                'question': next_question,
                                'previous': previous,
@@ -257,7 +257,7 @@ def final_result_anon(request, quiz, previous):
     session_score, session_possible = anon_session_score(request)
     
     if quiz.answers_at_end == False:  #  if answer was shown after each question
-        return render_to_response('result.html',
+        return render_to_response('quiz/result.html',
                                   {
                                    'score': score, 
                                    'max_score': max_score,
@@ -270,7 +270,7 @@ def final_result_anon(request, quiz, previous):
                                   )
     else:  #  show all questions and answers
         questions = quiz.question_set.all()
-        return render_to_response('result.html',
+        return render_to_response('quiz/result.html',
                                   {
                                    'score': score, 
                                    'max_score': max_score,
@@ -299,7 +299,7 @@ def final_result_user(request, sitting, previous):
         sitting.delete()  #  delete the sitting to free up DB space
     
     if quiz.answers_at_end == False:  #  answer was shown after each question
-        return render_to_response('result.html',
+        return render_to_response('quiz/result.html',
                                   {
                                    'quiz': quiz,
                                    'score': score, 
@@ -311,7 +311,7 @@ def final_result_user(request, sitting, previous):
                                   )
     else:  #  show all questions and answers
         questions = quiz.question_set.all()
-        return render_to_response('result.html',
+        return render_to_response('quiz/result.html',
                                   {
                                    'quiz': quiz,
                                    'score': score, 
@@ -432,7 +432,7 @@ def progress(request):
     if request.user.is_authenticated() != True:  #  if anon
         #  display session score and encourage to sign up
         score, possible = anon_session_score(request)
-        return render_to_response('signup.html',
+        return render_to_response('quiz/signup.html',
                                   {'anon_score': score, 'anon_possible': possible, },
                                   context_instance=RequestContext(request)
                                   )
@@ -446,7 +446,7 @@ def progress(request):
         # Most likely just signed up as redirect to progress after signup
         # no current progress object, make one
         progress = Progress.objects.new_progress(request.user)
-        return render_to_response('progress.html',
+        return render_to_response('quiz/progress.html',
                               {'new_user': True,},
                               context_instance=RequestContext(request)
                               )
@@ -456,7 +456,7 @@ def progress(request):
     
     exams = progress.show_exams()  #  queryset of the exams a user has sat
     
-    return render_to_response('progress.html',
+    return render_to_response('quiz/progress.html',
                               {'cat_scores': cat_scores, 'exams': exams},
                               context_instance=RequestContext(request)
                               )
