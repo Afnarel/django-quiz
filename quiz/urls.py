@@ -1,4 +1,7 @@
-from django.conf.urls.defaults import *
+try:
+    from django.conf.urls.defaults import urlpatterns, url
+except ImportError:
+    from django.conf.urls import urlpatterns, url
 
 urlpatterns = patterns('',
     # quiz base url    
