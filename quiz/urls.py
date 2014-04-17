@@ -4,28 +4,13 @@ except ImportError:
     from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
-    '',
-    # quiz base url
-    url(r'^$', 'quiz.views.index'),
+    'quiz.views',
+    url(r'^$', 'index',
+        name='quiz_categories'),
 
-    # quiz category list
-    url(r'^category/(?P<slug>[^\.]+)', 'quiz.views.view_category',
-        name='view_quiz_category'),
+    url(r'^category/(?P<category_id>\d+)', 'view_category',
+        name='quiz_category'),
 
-    #  progress
-    url(r'^progress/$', 'quiz.views.progress'),
-    url(r'^progress$', 'quiz.views.progress'),
-
-    #  passes variable 'quiz_name' to quiz_take view
-    url(r'^(?P<quiz_name>[\w-]+)/$',
-        'quiz.views.quiz_take'),  # quiz/
-
-    url(r'^(?P<quiz_name>[\w-]+)$',
-        'quiz.views.quiz_take'),  # quiz
-
-    url(r'^(?P<quiz_name>[\w-]+)/take/$',
-        'quiz.views.quiz_take'),  # quiz/take/
-
-    url(r'^(?P<quiz_name>[\w-]+)take$',
-        'quiz.views.quiz_take')  # quiz/take
+    # url(r'^take/(?P<quiz_name>[\w-]+)/$', 'quiz_take',
+    #     name='quiz_take'),
 )

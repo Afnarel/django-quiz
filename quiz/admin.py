@@ -1,7 +1,6 @@
-from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple
-from quiz.models import Quiz, Category, Progress, Question, Answer
+from quiz.models import Quiz, Category, Question, Answer
+from forms import QuizAdminForm
 
 
 class QuestionInline(admin.TabularInline):
@@ -11,36 +10,6 @@ class QuestionInline(admin.TabularInline):
 
 class AnswerInline(admin.TabularInline):
     model = Answer
-
-"""
-below is from
-http://stackoverflow.com/questions/11657682/django-admin-interface-using-horizontal-filter-with-inline-manytomany-field  # NOQA
-"""
-
-
-class QuizAdminForm(forms.ModelForm):
-    class Meta:
-        model = Quiz
-
-    questions = forms.ModelMultipleChoiceField(
-        queryset=Question.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple(verbose_name=('Questions'),
-                                      is_stacked=False))
-
-    def __init__(self, *args, **kwargs):
-        super(QuizAdminForm, self).__init__(*args, **kwargs)
-        if self.instance.pk:
-            self.fields['questions'].initial = self.instance.question_set.all()
-
-    def save(self, commit=True):
-        quiz = super(QuizAdminForm, self).save(commit=False)
-        if commit:
-            quiz.save()
-        if quiz.pk:
-            quiz.question_set = self.cleaned_data['questions']
-            self.save_m2m()
-        return quiz
 
 
 class QuizAdmin(admin.ModelAdmin):
@@ -52,7 +21,7 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    search_fields = ('category',)
+    search_fields = ('name',)
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -66,13 +35,6 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
 
 
-class ProgressAdmin(admin.ModelAdmin):
-    """
-    TODO: create a user section
-    """
-    search_fields = ('user', 'score',)
-
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Progress, ProgressAdmin)
