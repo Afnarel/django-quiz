@@ -11,6 +11,6 @@ urlpatterns = patterns(
     url(r'^category/(?P<category_id>\d+)', 'view_category',
         name='quiz_category'),
 
-    # url(r'^take/(?P<quiz_name>[\w-]+)/$', 'quiz_take',
-    #     name='quiz_take'),
+    url(r'^take/(?P<quiz_id>\d+)/$', 'quiz_take',
+        name='quiz_take'),
 )

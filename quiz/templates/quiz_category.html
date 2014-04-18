@@ -16,7 +16,7 @@
         <ul>
         {% for quiz in quizzes %}
             <li>
-                <a href="{# url take_quiz #}">
+                <a href="{% url "quiz_take" quiz.id %}">
                     {{ quiz.title }}
                 </a>
             </li>
@@ -26,20 +26,4 @@
         <p>There are no quizzes.</p>
     {% endif %}
 
-{% endblock %}
-
-{% extends "base.html" %}
-{% block title %}Quizzes related to {{ category.name }}{% endblock %}
-
-{% block article %}
-    {% if quizzes %}
-    <h1>Quizzes in {{ category.name }}</h1>
-        <ul>
-        {% for quiz in quizzes %}
-            <li><a href="{{ BASE_URL }}/quiz/{{ quiz.url }}">{{ quiz.title }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>There are no quizzes.</p>
-    {% endif %}
 {% endblock %}

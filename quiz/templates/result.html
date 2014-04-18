@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load quiz_tags %}
+{% load i18n %}
+
+{% block page_title %}
+    Exam Paper Result
+{% endblock %}
+
+{% block header %}
+<h3>Exam Paper Result</h3>
+{% endblock %}
+
+
+{% block article %}
+
+Exam Results
+
+{% if previous %}
+    <p class="muted"><small>The previous question:</small></p>
+    <p>{{ previous.previous_question }}</p>
+    <p>
+        Your answer was <em>{{ previous.previous_answer }}</em>
+        which is <strong>{{ previous.previous_outcome }}</strong>
+    </p>
+
+    {% correct_answer previous %}
+
+    <p><strong>Explanation:</strong></p>
+    <div class="well " style="background-color: #fcf8e3;">
+        <p>{{ previous.previous_question.explanation }}</p>
+    </div>
+
+{% endif %}
+
+{# Score #}
+
+<hr />
+
+<div>
+    <h2>Exam results</h2>
+    <p>
+        <small class="muted">Exam title:</small>
+        <strong>{{ quiz.title }}</strong></p>
+
+        <p class="lead">
+            You answered {{ score }} questions correctly out of {{ max_score }}, giving you {{ percent }} percent correct
+        </p>
+
+        <p>Review the questions below and try the exam again in the future.</p>
+</div>
+
+<hr />
+
+{% if questions %}
+    {% for question in questions %}
+        <p class="lead">{{ question.content }}</p>
+        {% correct_answer_for_all_with_users_incorrect question incorrect_questions %}
+    {% endfor %}
+{% else %}
+    You have already seen answers after each question so we are not displaying
+    them again here.
+{% endif %}
+
+{% endblock %}
