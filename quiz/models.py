@@ -65,7 +65,6 @@ class Quiz(models.Model):
         "by a user will be stored")
 
     class Meta:
-        abstract = True
         verbose_name = "Quiz"
         verbose_name_plural = "Quizzes"
 
