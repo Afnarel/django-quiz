@@ -1,35 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
-# Uncomment this and "choices" in the Category model
-# to prepopulate the categories
-# CATEGORY_CHOICES = (('Endocrinology', 'Endocrinology'),
-#                     ('Dermatology', 'Dermatology'),
-#                     ('Psychiatry', 'Psychiatry'),
-#                     ('Cardiology', 'Cardiology'))
+from program.models import Activity
+from thematic.models import Thematic
 
 
-class Category(models.Model):
-    """
-    Category for a quiz or question
-    """
-
-    # TODO: blank/null?
-    # TODO: fixed choices?
-    name = models.CharField(
-        max_length=250,
-        # choices=CATEGORY_CHOICES,
-        unique=True)
-
-    class Meta:
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
-
-    def __unicode__(self):
-        return self.name
-
-
-class Quiz(models.Model):
+class Quiz(Activity):
     """
     Quiz is a container that can be filled with various
     different question types or other content
@@ -39,11 +14,6 @@ class Quiz(models.Model):
 
     description = models.TextField(blank=True,
                                    help_text="a description of the quiz")
-
-    category = models.ForeignKey(
-        Category,
-        null=True,
-        blank=True)
 
     random_order = models.BooleanField(
         blank=False,
@@ -76,7 +46,7 @@ class Question(models.Model):
 
     quiz = models.ManyToManyField(Quiz, blank=True)
 
-    category = models.ForeignKey(Category, blank=True, null=True)
+    thematic = models.ForeignKey(Thematic, blank=True, null=True)
 
     content = models.CharField(
         max_length=1000,
@@ -94,7 +64,7 @@ class Question(models.Model):
     class Meta:
         verbose_name = "Question"
         verbose_name_plural = "Questions"
-        ordering = ['category']
+        ordering = ['thematic']
 
     def __unicode__(self):
         return self.content

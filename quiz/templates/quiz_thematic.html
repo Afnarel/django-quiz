@@ -3,27 +3,27 @@
 
 
 {% block page_title %}
-    Quiz categories
+    Quizzes related to {{ thematic.name }}
 {% endblock %}
 
 {% block header %}
-    <h3>Categories</h3>
+    <h3>Quizzes in {{ thematic.name }}</h3>
 {% endblock %}
 
 {% block article %}
 
-    {% if categories %}
+    {% if quizzes %}
         <ul>
-        {% for category in categories %}
+        {% for quiz in quizzes %}
             <li>
-                <a href="{% url "quiz_category" category.id %}">
-                    {{ category.name }}
+                <a href="{% url "quiz_take" quiz.id %}">
+                    {{ quiz.title }}
                 </a>
             </li>
         {% endfor %}
         </ul>
     {% else %}
-        <p>There are no categories.</p>
+        <p>There are no quizzes.</p>
     {% endif %}
 
 {% endblock %}

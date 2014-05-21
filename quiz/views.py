@@ -3,23 +3,24 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import render, get_object_or_404
-from quiz.models import Category, Quiz, Sitting, Question, Answer
+from quiz.models import Quiz, Sitting, Question, Answer
+from thematic.models import Thematic
 from django.contrib.auth.decorators import login_required
 
 
 @login_required
 def index(request):
-    return render(request, 'quiz/quiz_categories.html', {
-        'categories': Category.objects.all(),
+    return render(request, 'quiz/quiz_thematics.html', {
+        'thematics': Thematic.objects.all(),
     })
 
 
 @login_required
-def view_category(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
-    quizzes = Quiz.objects.filter(category=category)
-    return render(request, 'quiz/quiz_category.html', {
-        'category': category,
+def view_thematic(request, thematic_id):
+    thematic = get_object_or_404(Thematic, id=thematic_id)
+    quizzes = Quiz.objects.filter(thematic=thematic)
+    return render(request, 'quiz/quiz_thematic.html', {
+        'thematic': thematic,
         'quizzes': quizzes})
 
 

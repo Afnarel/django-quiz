@@ -1,5 +1,5 @@
 from django.contrib import admin
-from quiz.models import Quiz, Category, Question, Answer
+from quiz.models import Quiz, Question, Answer
 from forms import QuizAdminForm
 
 
@@ -15,19 +15,15 @@ class AnswerInline(admin.TabularInline):
 class QuizAdmin(admin.ModelAdmin):
     form = QuizAdminForm
 
-    list_display = ('title', 'category',)
-    list_filter = ('category',)
-    search_fields = ('description', 'category',)
-
-
-class CategoryAdmin(admin.ModelAdmin):
-    search_fields = ('name',)
+    list_display = ('title', 'thematic',)
+    list_filter = ('thematic',)
+    search_fields = ('description', 'thematic',)
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('content', 'category',)
-    list_filter = ('category',)
-    fields = ('content', 'category', 'quiz', 'explanation',)
+    list_display = ('content', 'thematic',)
+    list_filter = ('thematic',)
+    fields = ('content', 'thematic', 'quiz', 'explanation',)
 
     search_fields = ('content',)
     filter_horizontal = ('quiz',)
@@ -36,5 +32,4 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Quiz, QuizAdmin)
-admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)

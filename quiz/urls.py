@@ -6,10 +6,10 @@ except ImportError:
 urlpatterns = patterns(
     'quiz.views',
     url(r'^$', 'index',
-        name='quiz_categories'),
+        name='quiz_thematics'),
 
-    url(r'^category/(?P<category_id>\d+)', 'view_category',
-        name='quiz_category'),
+    url(r'^thematic/(?P<thematic_id>\d+)', 'view_thematic',
+        name='quiz_thematic'),
 
     url(r'^take/(?P<quiz_id>\d+)/$', 'quiz_take',
         name='quiz_take'),
