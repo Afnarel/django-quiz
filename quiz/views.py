@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
-    return render(request, 'quiz_categories.html', {
+    return render(request, 'quiz/quiz_categories.html', {
         'categories': Category.objects.all(),
     })
 
@@ -18,7 +18,7 @@ def index(request):
 def view_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     quizzes = Quiz.objects.filter(category=category)
-    return render(request, 'quiz_category.html', {
+    return render(request, 'quiz/quiz_category.html', {
         'category': category,
         'quizzes': quizzes})
 
@@ -80,7 +80,7 @@ def load_next_question(request, sitting, quiz):
 
     next_question = Question.objects.get(id=question_ID)
 
-    return render_to_response('question.html',
+    return render_to_response('quiz/question.html',
                               {'quiz': quiz,
                                'question': next_question,
                                'previous': previous,
@@ -132,7 +132,7 @@ def final_result(request, sitting, previous):
         sitting.delete()  # delete the sitting to free up DB space
 
     if not quiz.answers_at_end:  # answer was shown after each question
-        return render_to_response('result.html', {
+        return render_to_response('quiz/result.html', {
             'quiz': quiz,
             'score': score,
             'max_score': max_score,
@@ -141,7 +141,7 @@ def final_result(request, sitting, previous):
             context_instance=RequestContext(request))
     else:  # show all questions and answers
         questions = quiz.question_set.all()
-        return render_to_response('result.html', {
+        return render_to_response('quiz/result.html', {
             'quiz': quiz,
             'score': score,
             'max_score': max_score,
