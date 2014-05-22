@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.core.urlresolvers import reverse
 from program.models import Activity
 from thematic.models import Thematic
 
@@ -9,8 +10,6 @@ class Quiz(Activity):
     Quiz is a container that can be filled with various
     different question types or other content
     """
-
-    title = models.CharField(max_length=60, blank=False)
 
     description = models.TextField(blank=True,
                                    help_text="a description of the quiz")
@@ -38,8 +37,11 @@ class Quiz(Activity):
         verbose_name = "Quiz"
         verbose_name_plural = "Quizzes"
 
+    def get_absolute_url(self):
+        return reverse('quiz_take', args=[self.pk])
+
     def __unicode__(self):
-        return self.title
+        return self.name
 
 
 class Question(models.Model):
@@ -198,8 +200,11 @@ class Sitting(models.Model):
         """
         returns the percentage correct as an integer
         """
+        nb_questions = self.quiz.question_set.all().count()
+        if nb_questions == 0:
+            return 0
         return int(round((float(self.current_score) / float(
-            self.quiz.question_set.all().count())) * 100))
+            nb_questions)) * 100))
 
     def mark_quiz_complete(self):
         """
