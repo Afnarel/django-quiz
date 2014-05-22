@@ -37,8 +37,8 @@ class Quiz(Activity):
         verbose_name = "Quiz"
         verbose_name_plural = "Quizzes"
 
-    def get_absolute_url(self):
-        return reverse('quiz_take', args=[self.pk])
+    def get_usa_url(self, usa_id):
+        return reverse('my_quiz_details', args=[usa_id])
 
     def __unicode__(self):
         return self.name

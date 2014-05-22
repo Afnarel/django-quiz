@@ -21,7 +21,12 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('content', 'thematic',)
+
+    def quiz_list(self, question):
+        return ','.join(['%s (%s)' % (quiz.name, quiz.pk)
+                        for quiz in question.quiz.all()])
+
+    list_display = ('content', 'thematic', 'quiz_list')
     list_filter = ('thematic',)
     fields = ('content', 'thematic', 'quiz', 'explanation',)
 
