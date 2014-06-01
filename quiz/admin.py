@@ -1,5 +1,5 @@
 from django.contrib import admin
-from quiz.models import Quiz, Question, Answer
+from quiz.models import Quiz, Question, Answer, Sitting
 from forms import QuizAdminForm
 
 
@@ -38,3 +38,5 @@ class QuestionAdmin(admin.ModelAdmin):
 
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Answer)
+admin.site.register(Sitting)
