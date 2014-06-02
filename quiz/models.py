@@ -11,6 +11,8 @@ class Quiz(Activity):
     different question types or other content
     """
 
+    name = models.CharField(max_length=250)
+
     description = models.TextField(blank=True,
                                    help_text="a description of the quiz")
 
