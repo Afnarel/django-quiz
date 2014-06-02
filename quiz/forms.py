@@ -14,9 +14,9 @@ class QuizAdminForm(forms.ModelForm):
                                       is_stacked=False))
 
     def __init__(self, *args, **kwargs):
+        super(QuizAdminForm, self).__init__(*args, **kwargs)
         if self.instance.pk:
             self.fields['questions'].initial = self.instance.question_set.all()
-        super(QuizAdminForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
         quiz = super(QuizAdminForm, self).save(commit=False)

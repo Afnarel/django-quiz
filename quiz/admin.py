@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import admin
 from quiz.models import Quiz, Question, Answer, Sitting
 from forms import QuizAdminForm
