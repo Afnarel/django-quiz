@@ -55,7 +55,7 @@ def user_previous_exam(context, exam):
     """
     title = exam.quiz.name
     final_score = exam.current_score
-    possible_score = exam.quiz.question_set.count()
+    possible_score = exam.quiz.questions.count()
     percent = int(round((float(final_score) / float(possible_score)) * 100))
     return {'title': title, 'score': final_score,
             'possible': possible_score, 'percent': percent, }

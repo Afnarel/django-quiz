@@ -124,7 +124,7 @@ def final_result(request, sitting, previous):
     quiz = sitting.quiz
     score = sitting.get_current_score()
     incorrect = sitting.get_incorrect_questions()
-    max_score = quiz.question_set.all().count()
+    max_score = quiz.questions.all().count()
     percent = sitting.get_percent_correct()
 
     sitting.mark_quiz_complete()  # mark as complete
@@ -141,7 +141,7 @@ def final_result(request, sitting, previous):
             'previous': previous},
             context_instance=RequestContext(request))
     else:  # show all questions and answers
-        questions = quiz.question_set.all()
+        questions = quiz.questions.all()
         return render_to_response('quiz/result.html', {
             'quiz': quiz,
             'score': score,

@@ -52,7 +52,8 @@ class Quiz(Activity):
 
 class Question(models.Model):
 
-    quiz = models.ManyToManyField(Quiz, blank=True)
+    quiz = models.ManyToManyField(Quiz, blank=True,
+                                  related_name='questions')
 
     thematic = models.ForeignKey(Thematic, blank=True, null=True,
                                  related_name='questions')
@@ -105,9 +106,9 @@ class SittingManager(models.Manager):
         Called at the start of a new attempt at a quiz
         """
         if quiz.random_order:
-            question_set = quiz.question_set.all().order_by('?')
+            question_set = quiz.questions.all().order_by('?')
         else:
-            question_set = quiz.question_set.all()
+            question_set = quiz.questions.all()
 
         questions = ""
         for question in question_set:
@@ -207,7 +208,7 @@ class Sitting(models.Model):
         """
         returns the percentage correct as an integer
         """
-        nb_questions = self.quiz.question_set.all().count()
+        nb_questions = self.quiz.questions.all().count()
         if nb_questions == 0:
             return 0
         return int(round((float(self.current_score) / float(
