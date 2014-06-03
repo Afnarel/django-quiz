@@ -129,6 +129,11 @@ def final_result(request, sitting, previous):
 
     sitting.mark_quiz_complete()  # mark as complete
 
+    # Get the corresponding UserStageActivity and validate it
+    usa = quiz.get_for(request.user)
+    if usa:
+        usa.validate()
+
     if not quiz.exam_paper:  # if we do not plan to store the outcome
         sitting.delete()  # delete the sitting to free up DB space
 
