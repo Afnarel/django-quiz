@@ -54,7 +54,8 @@ class Question(models.Model):
 
     quiz = models.ManyToManyField(Quiz, blank=True)
 
-    thematic = models.ForeignKey(Thematic, blank=True, null=True)
+    thematic = models.ForeignKey(Thematic, blank=True, null=True,
+                                 related_name='questions')
 
     content = models.CharField(
         max_length=1000,
