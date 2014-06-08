@@ -31,32 +31,41 @@ def quiz_take(request, quiz_id):
     #   * If there can be several, use filter immediately.
     #   * If there can be only one, use get and do not catch
     #     Sitting.MultipleObjectsReturned since it will never occur
+    # ==> Ok! There is now only one sitting per quiz
 
     quiz = Quiz.objects.get(id=quiz_id)
 
     try:
-        previous_sitting = Sitting.objects.get(
-            user=request.user,
-            quiz=quiz,
-            complete=False)
-
+        sitting = Sitting.objects.get(user=request.user, quiz=quiz)
     except Sitting.DoesNotExist:
         #  start new quiz
         sitting = Sitting.objects.new_sitting(request.user, quiz)
-        return load_next_question(request, sitting, quiz)
 
-    except Sitting.MultipleObjectsReturned:
-        #  if more than one sitting found
-        previous_sitting = Sitting.objects.filter(
-            user=request.user,
-            quiz=quiz,
-            complete=False)[0]  # use the first one
+    return load_next_question(request, sitting, quiz)
 
-        return load_next_question(request, previous_sitting, quiz)
+    # try:
+    #     previous_sitting = Sitting.objects.get(
+    #         user=request.user,
+    #         quiz=quiz,
+    #         complete=False)
 
-    else:
-        #  use existing quiz
-        return load_next_question(request, previous_sitting, quiz)
+    # except Sitting.DoesNotExist:
+    #     #  start new quiz
+    #     sitting = Sitting.objects.new_sitting(request.user, quiz)
+    #     return load_next_question(request, sitting, quiz)
+
+    # except Sitting.MultipleObjectsReturned:
+    #     #  if more than one sitting found
+    #     previous_sitting = Sitting.objects.filter(
+    #         user=request.user,
+    #         quiz=quiz,
+    #         complete=False)[0]  # use the first one
+
+    #     return load_next_question(request, previous_sitting, quiz)
+
+    # else:
+    #     #  use existing quiz
+    #     return load_next_question(request, previous_sitting, quiz)
 
 
 @login_required

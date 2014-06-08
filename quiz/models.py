@@ -133,7 +133,7 @@ class SittingManager(models.Manager):
             quiz=quiz,
             question_list=questions,
             incorrect_questions="",
-            current_score="0",
+            current_score=0,
             complete=False)
         new_sitting.save()
         return new_sitting
@@ -164,7 +164,7 @@ class Sitting(models.Model):
     incorrect_questions = models.TextField(blank=True)
     # a string of the score ie 19  convert to int for use
     # TODO: Why is this a string? Change to int
-    current_score = models.TextField()
+    current_score = models.IntegerField(default=0)
     complete = models.BooleanField(default=False, blank=False)
     objects = SittingManager()
 
@@ -208,14 +208,14 @@ class Sitting(models.Model):
         """
         present_score = self.get_current_score()
         updated_score = present_score + int(points)
-        self.current_score = str(updated_score)
+        self.current_score = updated_score
         self.save()
 
     def get_current_score(self):
         """
         returns the current score as an integer
         """
-        return int(self.current_score)
+        return self.current_score
 
     def get_percent_correct(self):
         """
