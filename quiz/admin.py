@@ -17,7 +17,7 @@ class AnswerInline(admin.TabularInline):
 class QuizAdmin(admin.ModelAdmin):
     form = QuizAdminForm
 
-    list_display = ('name', 'thematic',)
+    list_display = ('name', 'thematic', 'kind', )
     list_filter = ('thematic',)
     search_fields = ('description', 'thematic',)
 
