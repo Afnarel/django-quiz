@@ -90,14 +90,18 @@ def load_next_question(request, sitting, quiz_usa, quiz):
 
     next_question = Question.objects.get(id=question_ID)
 
-    return render_to_response('quiz/question.html',
-                              {'quiz': quiz,
-                                  'quiz_usa': quiz_usa,
-                               'question': next_question,
-                               'previous': previous,
-                               },
-                              context_instance=RequestContext(request)
-                              )
+    print "Percent correct:", sitting.get_percent_correct()
+    print "Category name:", quiz.thematic.get_root().name
+    return render_to_response(
+        'quiz/question.html', {
+            'quiz': quiz,
+            'quiz_usa': quiz_usa,
+            'question': next_question,
+            'category': quiz.thematic.get_root().name,
+            'percent_correct': sitting.get_percent_correct(),
+            'previous': previous,
+        },
+        context_instance=RequestContext(request))
 
 
 @login_required

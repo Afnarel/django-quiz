@@ -5,12 +5,16 @@ register = template.Library()
 
 
 @register.inclusion_tag('quiz/answers_for_question.html', takes_context=True)
-def answers_for_question(context, question, quiz_usa):
+def answers_for_question(context, question, quiz_usa, quiz):
     """
     Displays the possible answers to a question
     """
     answers = Answer.objects.filter(question__id=question.id).order_by('?')
-    return {'answers': answers, 'quiz_usa': quiz_usa}
+    return {
+        'answers': answers,
+        'quiz_usa': quiz_usa,
+        'category': quiz.thematic.get_root().name
+    }
 
 
 @register.inclusion_tag('quiz/correct_answer.html', takes_context=True)
