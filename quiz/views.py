@@ -25,7 +25,7 @@ def view_thematic(request, thematic_id):
 
 
 @login_required
-def quiz_take(request, quiz_id):
+def quiz_take(request, quiz_usa):
     # TODO:
     #   * Can there really be more than one sitting? Is that good?
     #   * If there can be several, use filter immediately.
@@ -33,7 +33,7 @@ def quiz_take(request, quiz_id):
     #     Sitting.MultipleObjectsReturned since it will never occur
     # ==> Ok! There is now only one sitting per quiz
 
-    quiz = Quiz.objects.get(id=quiz_id)
+    quiz = quiz_usa.stage_activity.activity.real_activity
 
     try:
         sitting = Sitting.objects.get(user=request.user, quiz=quiz)
@@ -41,7 +41,7 @@ def quiz_take(request, quiz_id):
         #  start new quiz
         sitting = Sitting.objects.new_sitting(request.user, quiz)
 
-    return load_next_question(request, sitting, quiz)
+    return load_next_question(request, sitting, quiz_usa, quiz)
 
     # try:
     #     previous_sitting = Sitting.objects.get(
@@ -69,7 +69,7 @@ def quiz_take(request, quiz_id):
 
 
 @login_required
-def load_next_question(request, sitting, quiz):
+def load_next_question(request, sitting, quiz_usa, quiz):
     """
     Load the next question, including outcome of
     previous question, using the sitting
@@ -92,6 +92,7 @@ def load_next_question(request, sitting, quiz):
 
     return render_to_response('quiz/question.html',
                               {'quiz': quiz,
+                                  'quiz_usa': quiz_usa,
                                'question': next_question,
                                'previous': previous,
                                },
