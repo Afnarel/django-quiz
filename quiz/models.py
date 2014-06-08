@@ -3,6 +3,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from program.models import Activity
 from thematic.models import Thematic
+from django.utils.translation import ugettext_lazy as _
 
 
 class Quiz(Activity):
@@ -10,6 +11,18 @@ class Quiz(Activity):
     Quiz is a container that can be filled with various
     different question types or other content
     """
+
+    CLASSIC = 'classic'
+    STARTING = 'starting'
+    ENDING = 'ending'
+    KINDS = (
+        (CLASSIC, _(u'classique')),
+        (STARTING, _(u'début')),
+        (ENDING, _(u'fin'))
+    )
+
+    kind = models.CharField(
+        max_length=20, choices=KINDS, blank=True, default=CLASSIC)
 
     title = models.CharField(max_length=250)
 
