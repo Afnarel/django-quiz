@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.core.urlresolvers import reverse
-from program.models import Activity
 from thematic.models import Thematic
 from django.utils.translation import ugettext_lazy as _
 
 
-class Quiz(Activity):
+class Quiz(models.Model):
     """
     Quiz is a container that can be filled with various
     different question types or other content
@@ -24,7 +22,9 @@ class Quiz(Activity):
     kind = models.CharField(
         max_length=20, choices=KINDS, blank=True, default=CLASSIC)
 
-    title = models.CharField(max_length=250)
+    thematic = models.ForeignKey(Thematic, related_name='quizzes')
+
+    name = models.CharField(max_length=250)
 
     description = models.TextField(blank=True,
                                    help_text="a description of the quiz")
@@ -52,15 +52,8 @@ class Quiz(Activity):
         verbose_name = "Quiz"
         verbose_name_plural = "Quizzes"
 
-    def get_usa_url(self, usa_id):
-        return reverse('my_quiz_details', args=[usa_id])
-
     def __unicode__(self):
         return self.name
-
-    @property
-    def name(self):
-        return self.title
 
 
 class Question(models.Model):
