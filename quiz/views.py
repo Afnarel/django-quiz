@@ -86,7 +86,7 @@ def load_next_question(request, sitting, quiz_usa, quiz):
 
     if not question_ID:
         #  no questions left
-        return final_result(request, sitting, previous)
+        return final_result(request, sitting, previous, quiz_usa, quiz)
 
     next_question = Question.objects.get(id=question_ID)
 
@@ -131,11 +131,10 @@ def question_check(request, quiz, sitting):
 
 
 @login_required
-def final_result(request, sitting, previous):
+def final_result(request, sitting, previous, quiz_usa, quiz):
     """
     The result page for a logged in user
     """
-    quiz = sitting.quiz
     score = sitting.get_current_score()
     incorrect = sitting.get_incorrect_questions()
     max_score = quiz.questions.all().count()
@@ -144,9 +143,8 @@ def final_result(request, sitting, previous):
     sitting.mark_quiz_complete()  # mark as complete
 
     # Get the corresponding UserStageActivity and validate it
-    usa = quiz.get_for(request.user)
-    if usa:
-        usa.validate()
+    if quiz_usa:
+        quiz_usa.validate()
 
     if not quiz.exam_paper:  # if we do not plan to store the outcome
         sitting.delete()  # delete the sitting to free up DB space
