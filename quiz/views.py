@@ -33,7 +33,7 @@ def quiz_take(request, quiz_usa):
     #     Sitting.MultipleObjectsReturned since it will never occur
     # ==> Ok! There is now only one sitting per quiz
 
-    quiz = quiz_usa.stage_activity.activity.real_activity
+    quiz = quiz_usa.activity.quiz
 
     try:
         sitting = Sitting.objects.get(user=request.user, quiz=quiz)
