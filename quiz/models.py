@@ -220,6 +220,18 @@ class Sitting(models.Model):
         return int(round((float(self.current_score) / float(
             nb_questions)) * 100))
 
+    def get_percent_done(self):
+        """
+        returns the percentage correct as an integer
+        """
+        nb_questions = self.quiz.questions.all().count()
+        if nb_questions == 0:
+            return 0
+        nb_questions_done = nb_questions - len(
+            self.question_list.split(',')) + 1
+        return int(round((nb_questions_done / float(
+            nb_questions)) * 100))
+
     def mark_quiz_complete(self):
         """
         Changes the quiz to complete.

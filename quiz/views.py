@@ -90,15 +90,13 @@ def load_next_question(request, sitting, quiz_usa, quiz):
 
     next_question = Question.objects.get(id=question_ID)
 
-    print "Percent correct:", sitting.get_percent_correct()
-    print "Category name:", quiz.thematic.get_root().name
     return render_to_response(
         'quiz/question.html', {
             'quiz': quiz,
             'quiz_usa': quiz_usa,
             'question': next_question,
             'category': quiz.thematic.get_root().name,
-            'percent_correct': sitting.get_percent_correct(),
+            'percent_correct': sitting.get_percent_done(),
             'previous': previous,
         },
         context_instance=RequestContext(request))
@@ -139,6 +137,7 @@ def final_result(request, sitting, previous, quiz_usa, quiz):
     incorrect = sitting.get_incorrect_questions()
     max_score = quiz.questions.all().count()
     percent = sitting.get_percent_correct()
+    category = quiz.thematic.get_root().name
 
     sitting.mark_quiz_complete()  # mark as complete
 
@@ -155,6 +154,7 @@ def final_result(request, sitting, previous, quiz_usa, quiz):
             'score': score,
             'max_score': max_score,
             'percent': percent,
+            'category': category,
             'previous': previous},
             context_instance=RequestContext(request))
     else:  # show all questions and answers
@@ -165,6 +165,7 @@ def final_result(request, sitting, previous, quiz_usa, quiz):
             'score': score,
             'max_score': max_score,
             'percent': percent,
+            'category': category,
             'questions': questions,
             'incorrect_questions': incorrect},
             context_instance=RequestContext(request))
