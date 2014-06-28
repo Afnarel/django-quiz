@@ -179,30 +179,16 @@ class Sitting(models.Model):
 
         return qID
 
-    def remove_first_question(self):
-        """
-        Removes the first question on the list.
-        Does not return a value.
-        """
-        # TODO: Simplify this method (split/join/pop/remove)
-        # finds the index of the first comma in the string
-        first_comma = self.question_list.find(',')
-        # if question number IS found
-        if first_comma != -1 or first_comma != 0:  # TODO: this is always true!
-            # saves from the first number after the first comma
-            temp = self.question_list[first_comma+1:]
-            self.question_list = temp
-        self.save()  # TODO: saving is useless if it hasn't been modified!
-
     def add_to_score(self, points):
         """
         Adds the points to the running total.
         Does not return anything
         """
-        present_score = self.get_current_score()
-        updated_score = present_score + int(points)
-        self.current_score = updated_score
-        self.save()
+        # Once the quiz is done, the score cannot change
+        # anymore
+        if not self.complete:
+            self.current_score += int(points)
+            self.save()
 
     def get_current_score(self):
         """
@@ -242,18 +228,97 @@ class Sitting(models.Model):
 
     def add_incorrect_question(self, question):
         """
-        Adds the uid of an incorrect question to the list
-        of incorrect questions
-        The question object must be passed in
-        Does not return anything
+        Adds an incorrect question
         """
-        current_incorrect = self.incorrect_questions
-        question_id = question.id
-        if current_incorrect == "":
-            updated = str(question_id) + ","
+        question_id = str(question.id)
+        questions = self.question_list.split(',')
+
+        # If the question was already answered, don't
+        # do anything. Otherwise...
+        if question_id in questions:
+            self.incorrect_questions += question_id + ","
+            # Remove the question from the list of questions
+            questions.remove(question_id)
+            self.question_list = ','.join(questions)
+
+        self.save()
+
+    def add_incorrect_question_v2(self, question):
+        """
+        Adds an incorrect question
+        Allows to change the answer for a question
+        """
+        question_id = str(question.id)
+
+        questions = self.question_list.split(',')
+
+        # If it is in the list of questions, then it was never answered
+        # => add the question to the list of incorrect questions
+        if question_id in questions:
+            self.incorrect_questions += question_id + ","
+            # Remove the question from the list of questions
+            questions.remove(question_id)
+            self.question_list = ','.join(questions)
+
+        # If the question was answered previously
         else:
-            updated = current_incorrect + str(question_id) + ","
-        self.incorrect_questions = updated
+            # If it was answered incorrectly, no need to do anything
+            # If it was answered correctly, we need to remove the points
+            # the user earned by answering it and add the question to
+            # the list of incorrect questions
+            if question_id not in self.incorrect_questions.split(','):
+                self.incorrect_questions += question_id + ","
+                self.current_score -= 1
+
+        self.save()
+
+    def add_correct_question(self, question):
+        """
+        Adds a correct question
+        """
+        question_id = str(question.id)
+
+        questions = self.question_list.split(',')
+
+        # If the question was already answered, don't
+        # do anything. Otherwise...
+        if question_id in questions:
+            self.current_score += 1
+            # Remove the question from the list of questions
+            questions.remove(question_id)
+            self.question_list = ','.join(questions)
+
+        self.save()
+
+    def add_correct_question_v2(self, question):
+        """
+        Adds a correct question
+        Allows to change the answer for a question
+        """
+        question_id = str(question.id)
+
+        questions = self.question_list.split(',')
+
+        # If it is in the list of questions, then it was never answered
+        # => add points
+        if question_id in questions:
+            self.current_score += 1
+            # Remove the question from the list of questions
+            questions.remove(question_id)
+            self.question_list = ','.join(questions)
+
+        # If the question was answered previously
+        else:
+            incorrect = self.incorrect_questions.split(',')
+            # If it was answered correctly, no need to do anything
+            # If it was answered incorrectly:
+            #  * remove the question from the list of incorrect questions
+            #  * add the points that the user should earn
+            if question_id in incorrect:
+                incorrect.remove(question_id)
+                self.incorrect_questions = ','.join(incorrect)
+                self.current_score += 1
+
         self.save()
 
     def get_incorrect_questions(self):

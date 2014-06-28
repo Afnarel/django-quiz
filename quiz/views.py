@@ -80,7 +80,6 @@ def load_next_question(request, sitting, quiz_usa, quiz):
         #  if there has been a previous question
         #  returns a dictionary with previous question details
         previous = question_check(request, quiz, sitting)
-        sitting.remove_first_question()  # remove the first question
 
     question_ID = sitting.get_next_question()
 
@@ -116,7 +115,7 @@ def question_check(request, quiz, sitting):
 
     if answer.correct:
         outcome = "correct"
-        sitting.add_to_score(1)  # add 1 to sitting score.
+        sitting.add_correct_question(question)
     else:
         outcome = "incorrect"
         sitting.add_incorrect_question(question)
