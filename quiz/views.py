@@ -150,6 +150,7 @@ def final_result(request, sitting, previous, quiz_usa, quiz):
     if not quiz.answers_at_end:  # answer was shown after each question
         return render_to_response('quiz/result.html', {
             'quiz': quiz,
+            'quiz_usa': quiz_usa,
             'score': score,
             'max_score': max_score,
             'percent': percent,
