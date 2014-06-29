@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from quiz.models import Quiz, Sitting, Question, Answer
 from thematic.models import Thematic
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 @login_required
@@ -142,7 +143,11 @@ def final_result(request, sitting, previous, quiz_usa, quiz):
 
     # Get the corresponding UserStageActivity and validate it
     if quiz_usa:
-        quiz_usa.validate()
+        status, message = quiz_usa.validate()
+        if status is True:
+            messages.success(request, message)
+        else:
+            messages.error(request, message)
 
     if not quiz.exam_paper:  # if we do not plan to store the outcome
         sitting.delete()  # delete the sitting to free up DB space
