@@ -35,6 +35,12 @@ class Quiz(models.Model):
         help_text="Display the questions in a " +
         "random order or as they are set?")
 
+    random_answers_order = models.BooleanField(
+        blank=False,
+        default=False,
+        help_text="Display the answers in a " +
+        "random order or as they are set?")
+
     answers_at_end = models.BooleanField(
         blank=False,
         default=False,

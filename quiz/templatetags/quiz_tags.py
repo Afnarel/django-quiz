@@ -9,7 +9,12 @@ def answers_for_question(context, question, quiz_usa, quiz):
     """
     Displays the possible answers to a question
     """
-    answers = Answer.objects.filter(question__id=question.id).order_by('?')
+    answers = Answer.objects.filter(question__id=question.id)
+    if quiz.random_answers_order:
+        answers = answers.order_by('?')
+    else:
+        answers = answers.order_by('pk')
+
     return {
         'answers': answers,
         'quiz_usa': quiz_usa,
