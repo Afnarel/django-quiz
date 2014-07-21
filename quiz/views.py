@@ -96,7 +96,7 @@ def load_next_question(request, sitting, quiz_usa, quiz):
             'quiz': quiz,
             'quiz_usa': quiz_usa,
             'question': next_question,
-            'category': quiz.thematic.get_root().name,
+            'category': quiz.thematic.get_root(),
             'percent_correct': sitting.get_percent_done(),
             'previous': previous,
         },
@@ -138,7 +138,7 @@ def final_result(request, sitting, previous, quiz_usa, quiz):
     incorrect = sitting.get_incorrect_questions()
     max_score = quiz.questions.all().count()
     percent = sitting.get_percent_correct()
-    category = quiz.thematic.get_root().name
+    category = quiz.thematic.get_root()
 
     sitting.mark_quiz_complete()  # mark as complete
 
