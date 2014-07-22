@@ -8,6 +8,7 @@ from thematic.models import Thematic
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from program.models import UserStageActivity
+from django.utils.translation import ugettext as _
 
 
 @login_required
@@ -116,10 +117,10 @@ def question_check(request, quiz, sitting):
     question = answer.question
 
     if answer.correct:
-        outcome = "correct"
+        outcome = _("correct")
         sitting.add_correct_question(question)
     else:
-        outcome = "incorrect"
+        outcome = _("incorrect")
         sitting.add_incorrect_question(question)
 
     if not quiz.answers_at_end:  # display answer after each question
